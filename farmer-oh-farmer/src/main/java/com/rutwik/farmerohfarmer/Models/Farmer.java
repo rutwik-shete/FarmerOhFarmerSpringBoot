@@ -15,9 +15,9 @@ import javax.persistence.Table;
 import com.rutwik.farmerohfarmer.Constants;
 
 @Entity
-@Table(name = "Customer",schema = Constants.SCHEMA_NAME)
-public class Customer extends Dates{
-
+@Table(name = "Farmer",schema = Constants.SCHEMA_NAME)
+public class Farmer extends Dates{
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -41,16 +41,28 @@ public class Customer extends Dates{
 	
 	@Column(name="pincode")
 	private int pincode = 0;
-
-	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY,
-    cascade = CascadeType.ALL)
-	private Set<Order> orders;
 	
-	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY,
+	@Column(name="rating")
+	private double rating = 0;
+    
+    @OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY,
     cascade = CascadeType.ALL)
-    private Set<Cart> cart;
+	private Set<Locations> locations;
+	
+	@OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+	private Set<Product> product;
+	
+	@OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+	private Set<Courier> couriers;
+	
+	@OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private Set<Order> orders;
 
-	public Customer(String name, String phone, String email, String password, String address, int pincode) {
+
+	public Farmer(String name, String phone, String email, String password, String address, int pincode) {
 		super();
 		this.name = name;
 		this.phone = phone;
@@ -58,9 +70,10 @@ public class Customer extends Dates{
 		this.password = password;
 		this.address = address;
 		this.pincode = pincode;
+		this.rating = 0.0;
 	}
 
-	public Customer() {
+	public Farmer() {
 		super();
 	}
 
@@ -115,7 +128,20 @@ public class Customer extends Dates{
 	public void setPincode(int pincode) {
 		this.pincode = pincode;
 	}
+
+	public double getRating() {
+		return rating;
+	}
 	
-	
+	public void setRating(Double rating) {
+		System.out.println("This Is Rating"+rating);
+		if(rating != null){
+			this.rating = rating.doubleValue();
+		}
+		else{
+			this.rating = 0.0;
+		}
+
+	}	
 	
 }

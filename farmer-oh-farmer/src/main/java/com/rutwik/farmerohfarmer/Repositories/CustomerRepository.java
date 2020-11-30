@@ -9,4 +9,8 @@ import com.rutwik.farmerohfarmer.Models.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,Long>{
 
+	Customer findByEmailAndPassword(String email, String password);
+
+	boolean existsByEmail(String email);
+
 }

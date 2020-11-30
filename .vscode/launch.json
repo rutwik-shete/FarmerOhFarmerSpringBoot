@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-FarmerOhFarmerApplication<farmer-oh-farmer>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.rutwik.farmerohfarmer.FarmerOhFarmerApplication",
+            "projectName": "farmer-oh-farmer",
+            "args": ""
+        }
+    ]
+}
