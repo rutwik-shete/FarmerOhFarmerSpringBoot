@@ -28,7 +28,7 @@ public class ProductData extends Dates {
     private String name;
 
     @Column(name = "photo_link")
-    private String photo_link;
+    private String photoLink;
 
     @OneToMany(mappedBy="productData", fetch = FetchType.LAZY,
     cascade = CascadeType.ALL)
@@ -38,10 +38,10 @@ public class ProductData extends Dates {
         super();
     }
 
-    public ProductData(String name , String photo_link){
+    public ProductData(String name , String photoLink){
         super();
         this.name = name ;
-        this.photo_link = photo_link;
+        this.photoLink = photoLink;
     }
 
     public long getId() {
@@ -56,12 +56,12 @@ public class ProductData extends Dates {
         this.name = name;
     }
 
-    public String getPhoto_link() {
-        return this.photo_link;
+    public String getPhotoLink() {
+        return this.photoLink;
     }
 
-    public void setPhoto_link(String photo_link) {
-        this.photo_link = photo_link;
+    public void setPhotoLink(String photoLink) {
+        this.photoLink = photoLink;
     }
 
 }

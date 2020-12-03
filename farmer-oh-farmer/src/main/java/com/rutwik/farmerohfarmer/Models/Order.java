@@ -27,7 +27,7 @@ public class Order extends Dates{
     private long id;
 
     @Column(name = "delivery_status")
-    private String delivery_status;
+    private String deliveryStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "farmer_id", nullable = false)
@@ -62,12 +62,12 @@ public class Order extends Dates{
         this.id = id;
     }  
 
-    public String getDelivery_status() {
-        return this.delivery_status;
+    public String getDeliveryStatus() {
+        return this.deliveryStatus;
     }
 
-    public void setDelivery_status(String delivery_status) {
-        this.delivery_status = delivery_status;
+    public void setDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 
     public Farmer getFarmer() {

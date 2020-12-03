@@ -23,7 +23,7 @@ public class OrderContent {
     private long id;
 
     @Column(name = "product_quantity")
-    private int product_quantity = 0;
+    private int productQuantity = 0;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
@@ -37,9 +37,9 @@ public class OrderContent {
         super();
     }
 
-    OrderContent(int product_quantity, Product product, Order order){
+    OrderContent(int productQuantity, Product product, Order order){
         super();
-        this.product_quantity = product_quantity;
+        this.productQuantity = productQuantity;
         this.product = product;
         this.order = order;
     }
@@ -48,12 +48,12 @@ public class OrderContent {
         return this.id;
     }
 
-    public int getProduct_quantity() {
-        return this.product_quantity;
+    public int getProductQuantity() {
+        return this.productQuantity;
     }
 
-    public void setProduct_quantity(int product_quantity) {
-        this.product_quantity = product_quantity;
+    public void setProductQuantity(int productQuantity) {
+        this.productQuantity = productQuantity;
     }
 
     public Product getProduct() {

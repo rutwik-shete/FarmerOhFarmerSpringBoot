@@ -22,11 +22,11 @@ public class Locations extends Dates{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    @Column(name="delivery_pincode")
-    private int delivery_pincode = 0;
+    @Column(name="deliveryPincode")
+    private int deliveryPincode = 0;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "farmer_id", nullable = false)
+    @JoinColumn(name = "farmerId", nullable = false)
     private Farmer farmer;
 
 
@@ -34,9 +34,9 @@ public class Locations extends Dates{
         super();
     }
 
-    public Locations(int delivery_pincode, Farmer farmer){
+    public Locations(int deliveryPincode, Farmer farmer){
         super();
-        this.delivery_pincode = delivery_pincode;
+        this.deliveryPincode = deliveryPincode;
         this.farmer = farmer;
     }
 
@@ -44,15 +44,12 @@ public class Locations extends Dates{
 		return id;
 	}
 
-    public int getDelivery_pincode() {
-        return this.delivery_pincode;
+    public int getdeliveryPincode() {
+        return this.deliveryPincode;
     }
 
-    public void setDelivery_pincode(int delivery_pincode) {
-        this.delivery_pincode = delivery_pincode;
+    public void setdeliveryPincode(int deliveryPincode) {
+        this.deliveryPincode = deliveryPincode;
     }
-
-    
-
-    
+   
 }

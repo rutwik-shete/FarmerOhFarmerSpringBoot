@@ -134,14 +134,10 @@ public class Farmer extends Dates{
 	}
 	
 	public void setRating(Double rating) {
-		System.out.println("This Is Rating"+rating);
-		if(rating != null){
-			this.rating = rating.doubleValue();
-		}
-		else{
-			this.rating = 0.0;
-		}
+		this.rating = rating;
+	}
 
-	}	
-	
+	public Set<Locations> getLocations(){
+		return locations;
+	}
 }

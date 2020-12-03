@@ -22,7 +22,7 @@ public class Cart {
     private long id;
 
     @Column(name = "product_quantity")
-    private int product_quantity;
+    private int productQuantity;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
@@ -36,10 +36,10 @@ public class Cart {
         super();
     }
 
-    Cart(Product product , int product_quantity , Customer customer){
+    Cart(Product product , int productQuantity , Customer customer){
         super();
         this.product = product;
-        this.product_quantity = product_quantity;
+        this.productQuantity = productQuantity;
         this.customer = customer;
     }
 
@@ -47,12 +47,12 @@ public class Cart {
         return this.id;
     }
 
-    public int getProduct_quantity() {
-        return this.product_quantity;
+    public int getproductQuantity() {
+        return this.productQuantity;
     }
 
-    public void setProduct_quantity(int product_quantity) {
-        this.product_quantity = product_quantity;
+    public void setproductQuantity(int productQuantity) {
+        this.productQuantity = productQuantity;
     }
 
     public Product getProduct() {
