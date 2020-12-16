@@ -51,5 +51,17 @@ public class Locations extends Dates{
     public void setdeliveryPincode(int deliveryPincode) {
         this.deliveryPincode = deliveryPincode;
     }
+
+    public long getFarmerId(){
+        return farmer.getId();
+    }    
+
+    public String getFarmerName(){
+        return farmer.getName();
+    }
+
+    public double getFarmerRating(){
+        return farmer.getRating();
+    }
    
 }

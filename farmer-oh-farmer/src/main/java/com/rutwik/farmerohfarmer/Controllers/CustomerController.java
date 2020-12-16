@@ -1,7 +1,5 @@
 package com.rutwik.farmerohfarmer.Controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,18 +7,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.rutwik.farmerohfarmer.Models.Customer;
+import com.rutwik.farmerohfarmer.Models.Locations;
 import com.rutwik.farmerohfarmer.Models.Output;
 import com.rutwik.farmerohfarmer.Repositories.CustomerRepository;
+import com.rutwik.farmerohfarmer.Repositories.LocationsRepository;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/customer")
 public class CustomerController {
 
 	@Autowired
 	private CustomerRepository customerRepository;
+
+	@Autowired
+	private LocationsRepository locationsRepository;
 	
-	@GetMapping(path = "/welcomeCustomer")
+	@GetMapping(path = "/welcome")
 	public String welcomeMessage() {
 		return "Hello Customer";
 	}
@@ -47,13 +54,47 @@ public class CustomerController {
 		return new Output("Failed","Login Failed , Username Or Password Wrong",null);
 	}
 
-	@GetMapping("updateCustomer")
-	public Customer updateCustomer() {
-		long id = 1L;
-		Customer newCust = this.customerRepository.findById(id).get();
-		System.out.println("Hello There");
-		newCust.setName("Rutwik Shete");
-		customerRepository.save(newCust);
-		return newCust;
+	@PostMapping(path="/searchFarmerByLocation",consumes = "application/json",produces = "application/json")
+	public Output searchFarmerByLocation(@RequestBody Map<String,Integer> input){
+		int pincode = input.get("pincode");
+		List<Locations> famerFoundList = locationsRepository.findAllByDeliveryPincode(pincode);
+		List<FarmerByLocationOutput> result = new ArrayList<FarmerByLocationOutput>();
+		for(Locations locations : famerFoundList){
+			result.add(new FarmerByLocationOutput(locations.getFarmerName(), locations.getFarmerId(), locations.getFarmerRating()));
+		}
+		return new Output("Success","Farmers Fetched Easily",result);
+	}
+
+	public class FarmerByLocationOutput {
+		private String farmerName ;
+		private long farmerId;
+		private double farmerRating;
+
+		public FarmerByLocationOutput(String farmerName, long farmerId, double farmerRating) {
+			this.farmerName = farmerName;
+			this.farmerId = farmerId;
+			this.farmerRating = farmerRating;
+		}
+
+		public String getFarmerName(){
+			return this.farmerName;
+		}
+		public void setFarmerName(String farmerName){
+			this.farmerName = farmerName;
+		}
+
+		public long getFarmerId(){
+			return this.farmerId;
+		}
+		public void setFarmerID(long farmerId){
+			this.farmerId = farmerId;
+		}
+
+		public double getFarmerRating(){
+			return this.farmerRating;
+		}
+		public void serFarmerRating(double farmerRating){
+			this.farmerRating = farmerRating;
+		}
 	}
 }

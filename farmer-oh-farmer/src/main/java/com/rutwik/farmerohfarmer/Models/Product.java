@@ -1,6 +1,5 @@
 package com.rutwik.farmerohfarmer.Models;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,8 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import com.rutwik.farmerohfarmer.Constants;
@@ -69,5 +66,21 @@ public class Product extends Dates {
 
     public void setMeasurement(String measurement) {
         this.measurement = measurement;
+    }
+
+    public Farmer getFarmer(){
+        return farmer;
+    }
+
+    public void setFarmer(Farmer farmer){
+        this.farmer = farmer;
+    }
+
+    public ProductData getProductData() {
+        return this.productData;
+    }
+
+    public void setProductData(ProductData productData) {
+        this.productData = productData;
     }
 }
