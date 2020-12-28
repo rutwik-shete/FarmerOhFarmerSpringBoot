@@ -32,7 +32,7 @@ public class Product extends Dates {
     @JoinColumn(name = "farmer_id", nullable = false)
     private Farmer farmer;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "Product_Data_id", nullable = false)
     private ProductData productData;
 
@@ -68,16 +68,23 @@ public class Product extends Dates {
         this.measurement = measurement;
     }
 
-    public Farmer getFarmer(){
-        return farmer;
+    public long getFarmerId(){
+        return farmer.getId();
     }
 
     public void setFarmer(Farmer farmer){
         this.farmer = farmer;
     }
 
-    public ProductData getProductData() {
-        return this.productData;
+    public long getProductDataId(){
+        return productData.getId();
+    }
+
+    public String getProductDataName() {
+        return productData.getName();
+    }
+    public String getProductDataPhotoLink() {
+        return productData.getPhotoLink();
     }
 
     public void setProductData(ProductData productData) {

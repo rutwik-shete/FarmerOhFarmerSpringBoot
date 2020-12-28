@@ -44,7 +44,7 @@ public class Order extends Dates{
     @OneToMany(mappedBy = "order" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<OrderContent> orderContent;
     
-    Order(){
+    public Order(){
         super();
     }
 

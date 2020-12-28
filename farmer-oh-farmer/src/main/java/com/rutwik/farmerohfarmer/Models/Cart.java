@@ -12,10 +12,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.rutwik.farmerohfarmer.Constants;
+import com.rutwik.farmerohfarmer.Constants.IsOrdered;
 
 @Entity
 @Table(name="cart",schema=Constants.SCHEMA_NAME)
-public class Cart {
+public class Cart{
    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +33,13 @@ public class Cart {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    Cart(){
-        super();
+    @Column(name = "is_ordered")
+    private IsOrdered isOrdered = IsOrdered.NO;
+
+    public Cart(){
     }
 
-    Cart(Product product , int productQuantity , Customer customer){
-        super();
+    public Cart(Product product , int productQuantity , Customer customer ){
         this.product = product;
         this.productQuantity = productQuantity;
         this.customer = customer;
@@ -69,6 +71,14 @@ public class Cart {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public IsOrdered getIsOrdered(){
+        return isOrdered;
+    }
+
+    public void setIsOrdered(IsOrdered isOrdered){
+        this.isOrdered = isOrdered;
     }
 
 }

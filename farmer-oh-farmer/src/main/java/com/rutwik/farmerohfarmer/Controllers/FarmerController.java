@@ -46,17 +46,15 @@ public class FarmerController {
 	public Output addFarmer(@RequestBody Farmer farmer) {
 		if (!this.farmerRepository.existsByEmail(farmer.getEmail())) {
 			this.farmerRepository.save(farmer);
-			farmer.setPassword(null);
 			return new Output("Success", "Farmer Signed Up Successfully", farmer);
 		}
 		return new Output("Failed", "SignUp Failed , Farmer Already Exists", null);
 	}
 
 	@PostMapping(path = "/loginFarmer", consumes = "application/json", produces = "application/json")
-	public Output loginFarmer(@RequestBody Farmer farmer){
-		Farmer farmerFound = farmerRepository.findByEmailAndPassword(farmer.getEmail(),farmer.getPassword());
+	public Output loginFarmer(@RequestBody Map<String, String> farmer){
+		Farmer farmerFound = farmerRepository.findByEmailAndPassword(farmer.get("email"),farmer.get("password"));
 		if(farmerFound != null){
-			farmerFound.setPassword(null);
 			return new Output("Success","Farmer LoggedIn Successfully",farmerFound);
 			
 		}
@@ -89,8 +87,8 @@ public class FarmerController {
 
 	@PostMapping(path = "/addProduct",consumes = "application/json",produces = "application/json")
     public Output addProduct(@RequestBody Product product){
-        long productDataID = product.getProductData().getId();
-        long farmerID = product.getFarmer().getId();
+        long productDataID = product.getProductDataId();
+        long farmerID = product.getFarmerId();
         if(productDataRepository.existsById(productDataID)){
             ProductData productDataFound = productDataRepository.findById(productDataID).get();
             product.setProductData(productDataFound);
@@ -111,6 +109,5 @@ public class FarmerController {
         }
         return new Output("Failed","Product Not Added, ProductData ID Does Not Exists",null);
     }
-
 
 }
