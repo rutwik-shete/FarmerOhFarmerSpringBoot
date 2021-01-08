@@ -157,10 +157,16 @@ public class CustomerController {
 				}
 				else{
 					Cart updateCartItem = cartRepository.findByProductAndCustomerAndIsOrdered(product,customer,IsOrdered.NO);
-					updateCartItem.setproductQuantity(productQuantity);
-					cartRepository.save(updateCartItem);
-					//write another api to update from the cart
-					return new Output("Success","Item Updated To Cart Successfully",null);
+					if(productQuantity == 0){
+						cartRepository.delete(updateCartItem);
+						return new Output("Success","Item Removed From Cart Successfully",null);
+					}
+					else{
+						updateCartItem.setproductQuantity(productQuantity);
+						cartRepository.save(updateCartItem);
+						//write another api to update from the cart
+						return new Output("Success","Item Updated To Cart Successfully",null);
+					}
 				}
 			}
 			else{
@@ -168,6 +174,22 @@ public class CustomerController {
 			}
 		}
 		return new Output("Failed","Customer Does Not Exist",null);
+	}
+
+	@PostMapping(path="/getCartProducts",consumes = "application/json",produces = "application/json")
+	public Output getCartProducts(@RequestBody Map<String,Integer> customerInfo){
+		long customerId = customerInfo.get("customerId");
+		if(customerRepository.existsById(customerId)){//customer Not Exist
+			Customer customer = customerRepository.findById(customerId).get();
+			List<Cart> cartProducts = cartRepository.findAllByCustomerAndIsOrdered(customer,IsOrdered.NO);
+			if(!cartProducts.isEmpty()){
+				return new Output("Success","Cart Loaded Successfully",cartProducts);
+			}
+			else{
+				return new Output("Failed","Cart Is Empty",cartProducts);
+			}
+		}
+		return new Output("Failed","Customer Not Found",null);
 	}
 
 	@PostMapping(path="/placeOrder",consumes = "application/json",produces = "application/json")

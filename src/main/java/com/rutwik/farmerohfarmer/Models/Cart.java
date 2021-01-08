@@ -25,7 +25,7 @@ public class Cart{
     @Column(name = "product_quantity")
     private int productQuantity;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
@@ -65,13 +65,13 @@ public class Cart{
         this.product = product;
     }
 
-    public Customer getCustomer() {
-        return this.customer;
-    }
+    // public Customer getCustomer() {
+    //     return this.customer;
+    // }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
+    // public void setCustomer(Customer customer) {
+    //     this.customer = customer;
+    // }
 
     public IsOrdered getIsOrdered(){
         return isOrdered;
