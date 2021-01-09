@@ -12,19 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.rutwik.farmerohfarmer.Constants;
 import com.rutwik.farmerohfarmer.Constants.IsOrdered;
 import com.rutwik.farmerohfarmer.Models.Cart;
+import com.rutwik.farmerohfarmer.Models.Courier;
 import com.rutwik.farmerohfarmer.Models.Customer;
 import com.rutwik.farmerohfarmer.Models.Farmer;
 import com.rutwik.farmerohfarmer.Models.Locations;
 import com.rutwik.farmerohfarmer.Models.Order;
+import com.rutwik.farmerohfarmer.Models.OrderContent;
 import com.rutwik.farmerohfarmer.Models.Output;
 import com.rutwik.farmerohfarmer.Models.Product;
 import com.rutwik.farmerohfarmer.Repositories.CartRepository;
+import com.rutwik.farmerohfarmer.Repositories.CourierRepository;
 import com.rutwik.farmerohfarmer.Repositories.CustomerRepository;
 import com.rutwik.farmerohfarmer.Repositories.FarmerRepository;
 import com.rutwik.farmerohfarmer.Repositories.LocationsRepository;
+import com.rutwik.farmerohfarmer.Repositories.OrderContentRepository;
 import com.rutwik.farmerohfarmer.Repositories.OrderRepository;
 import com.rutwik.farmerohfarmer.Repositories.ProductRepository;
 
@@ -50,6 +53,12 @@ public class CustomerController {
 
 	@Autowired
 	private OrderRepository orderRepository;
+
+	@Autowired
+	private OrderContentRepository orderContentRepository;
+
+	@Autowired 
+	private CourierRepository courierRepository;
 
 	@GetMapping(path = "/welcome")
 	public String welcomeMessage() {
@@ -193,13 +202,50 @@ public class CustomerController {
 	}
 
 	@PostMapping(path="/placeOrder",consumes = "application/json",produces = "application/json")
-	public Output placeOrder(@RequestBody Map<String,Integer> orderInfo){
-		long customerId = orderInfo.get("customerId");
+	public Output placeOrder(@RequestBody Map<String,String> orderInfo){
+		long customerId = Long.parseLong(orderInfo.get("customerId"));
+		double orderAmount = Double.parseDouble(orderInfo.get("orderAmount"));
+		Customer customer;
+		Courier courier;
+		Farmer farmer;
+		Order order;
+		Product product;
+		long productId,farmerId = -1 ;
+		int productQuantity;
+		List<Cart> allCartItems = new ArrayList<Cart>();
 		if(customerRepository.existsById(customerId)){
-			Customer customer = customerRepository.findById(customerId).get();
-			if(cartRepository.existsByCustomer(customer)){
-				List<Cart> allCartItems = cartRepository.findAllByCustomer(customer);
-				orderRepository.save(new Order());
+			customer = customerRepository.findById(customerId).get();
+			if(cartRepository.existsByCustomerAndIsOrdered(customer,IsOrdered.NO)){
+				allCartItems = cartRepository.findAllByCustomerAndIsOrdered(customer,IsOrdered.NO);
+				for(Cart cartItem : allCartItems){
+					productId = cartItem.getProduct().getId();
+					long tempFarmerId = productRepository.findById(productId).get().getFarmerId();
+					if(allCartItems.indexOf(cartItem) == 0 || farmerId == tempFarmerId){
+						farmerId = tempFarmerId;
+					}
+					else{
+						return new Output("Failed","Products Added Are Not From The Same Farmer",null);
+					}
+				}
+				if(courierRepository.existsByFarmerId(farmerId)){
+					courier = courierRepository.findByFarmerId(farmerId).get();
+					farmer = farmerRepository.findById(farmerId).get();
+					order = orderRepository.save(new Order(farmer,customer,courier,orderAmount));
+					List <OrderContent> orderContents = new ArrayList<>();
+					for(Cart cartItem : allCartItems){
+						productQuantity = cartItem.getproductQuantity();
+						productId = cartItem.getProduct().getId();
+						product = productRepository.findById(productId).get();
+						cartItem.setIsOrdered(IsOrdered.YES);
+						cartRepository.save(cartItem);
+						orderContents.add(new OrderContent(productQuantity,product,order));
+					}
+					orderContentRepository.saveAll(orderContents);
+					return new Output("Success","Order Placed Successfully",order);
+				}
+				else{
+					return new Output("Failed","Farmer Does Not Have Delivery Facility Yet",null);
+				}
 				//farmer
 				//customer
 				//courier
@@ -207,7 +253,7 @@ public class CustomerController {
 				
 			}
 			else{
-				return new Output("Failed","Cart Empty",null);
+				return new Output("Failed","Cart Is Empty",null);
 			}
 		}
 		return new Output("Failed","Customer Does Not Exist",null);

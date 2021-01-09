@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.rutwik.farmerohfarmer.Constants;
+import com.rutwik.farmerohfarmer.Constants.IsDelivered;
 
 @Entity
 @Table(name="Order",schema=Constants.SCHEMA_NAME)
@@ -27,7 +28,7 @@ public class Order extends Dates{
     private long id;
 
     @Column(name = "delivery_status")
-    private String deliveryStatus;
+    private IsDelivered deliveryStatus = IsDelivered.NO;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "farmer_id", nullable = false)
@@ -41,6 +42,9 @@ public class Order extends Dates{
     @JoinColumn(name = "courier_id", nullable = false)
     private Courier courier;
 
+    @Column(name="order_amount")
+    private double orderAmount;
+
     @OneToMany(mappedBy = "order" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<OrderContent> orderContent;
     
@@ -48,10 +52,11 @@ public class Order extends Dates{
         super();
     }
 
-    Order(Farmer farmer, Customer customer, Courier courier){
+    public Order(Farmer farmer, Customer customer, Courier courier , Double orderAmount){
         this.farmer = farmer;
         this.customer = customer;
         this.courier = courier;
+        this.orderAmount = orderAmount;
     }
 
     public long getId() {
@@ -62,35 +67,43 @@ public class Order extends Dates{
         this.id = id;
     }  
 
-    public String getDeliveryStatus() {
+    public IsDelivered getDeliveryStatus() {
         return this.deliveryStatus;
     }
 
-    public void setDeliveryStatus(String deliveryStatus) {
+    public void setDeliveryStatus(IsDelivered deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
     }
 
-    public Farmer getFarmer() {
-        return this.farmer;
+    public long getFarmerId() {
+        return this.farmer.getId();
     }
 
-    public void setFarmer(Farmer farmer) {
-        this.farmer = farmer;
-    } 
+    // public void setFarmer(Farmer farmer) {
+    //     this.farmer = farmer;
+    // } 
 
-    public Customer getCustomer() {
-        return this.customer;
+    public long getCustomerId() {
+        return this.customer.getId();
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    // public void setCustomer(Customer customer) {
+    //     this.customer = customer;
+    // }
+
+    public long getCourierId() {
+        return this.courier.getId();
     }
 
-    public Courier getCourier() {
-        return this.courier;
+    // public void setCourier(Courier courier) {
+    //     this.courier = courier;
+    // }
+
+    public double getOrderAmount(){
+        return this.orderAmount;
     }
 
-    public void setCourier(Courier courier) {
-        this.courier = courier;
+    public void setOrderAmount(double orderAmount){
+        this.orderAmount = orderAmount;
     }
 }

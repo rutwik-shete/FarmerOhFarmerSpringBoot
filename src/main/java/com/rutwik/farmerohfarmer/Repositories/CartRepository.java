@@ -22,5 +22,7 @@ public interface CartRepository extends JpaRepository<Cart,Long>{
 	List<Cart> findAllByCustomer(Customer customer);
 
 	List<Cart> findAllByCustomerAndIsOrdered(Customer customer, IsOrdered no);
+
+	boolean existsByCustomerAndIsOrdered(Customer customer, IsOrdered no);
     
 }

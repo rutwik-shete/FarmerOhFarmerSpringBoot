@@ -36,7 +36,7 @@ public class OrderContent {
         super();
     }
 
-    OrderContent(int productQuantity, Product product, Order order){
+    public OrderContent(int productQuantity, Product product, Order order){
         super();
         this.productQuantity = productQuantity;
         this.product = product;
