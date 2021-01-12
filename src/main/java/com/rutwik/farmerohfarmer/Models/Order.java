@@ -75,8 +75,8 @@ public class Order extends Dates{
         this.deliveryStatus = deliveryStatus;
     }
 
-    public long getFarmerId() {
-        return this.farmer.getId();
+    public String getFarmerName() {
+        return this.farmer.getName();
     }
 
     // public void setFarmer(Farmer farmer) {
