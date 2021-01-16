@@ -24,7 +24,7 @@ public class OrderContent {
     @Column(name = "product_quantity")
     private int productQuantity = 0;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
@@ -63,9 +63,9 @@ public class OrderContent {
         this.product = product;
     }
 
-    public Order getOrder() {
-        return this.order;
-    }
+    // public Order getOrder() {
+    //     return this.order;
+    // }
 
     public void setOrder(Order order) {
         this.order = order;

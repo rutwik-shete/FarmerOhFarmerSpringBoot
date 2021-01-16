@@ -9,7 +9,7 @@ public class Constants {
     }
 
     public static enum IsDelivered{
-        NO,YES,PROCESSING,DELETED
+        PENDING,DELIVERED,PROCESSING,DELETED
     }
 
 }

@@ -1,15 +1,18 @@
 package com.rutwik.farmerohfarmer.Controllers;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import com.rutwik.farmerohfarmer.Models.Farmer;
+import com.rutwik.farmerohfarmer.Models.Order;
 import com.rutwik.farmerohfarmer.Models.Output;
 import com.rutwik.farmerohfarmer.Models.Product;
 import com.rutwik.farmerohfarmer.Models.ProductData;
 import com.rutwik.farmerohfarmer.Models.Locations;
 import com.rutwik.farmerohfarmer.Repositories.FarmerRepository;
 import com.rutwik.farmerohfarmer.Repositories.LocationsRepository;
+import com.rutwik.farmerohfarmer.Repositories.OrderRepository;
 import com.rutwik.farmerohfarmer.Repositories.ProductDataRepository;
 import com.rutwik.farmerohfarmer.Repositories.ProductRepository;
 
@@ -36,7 +39,10 @@ public class FarmerController {
 	private ProductRepository productRepository;
 	
 	@Autowired
-    private ProductDataRepository productDataRepository;
+	private ProductDataRepository productDataRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
 
 
 	@GetMapping("welcome")
@@ -110,6 +116,30 @@ public class FarmerController {
             }
         }
         return new Output("Failed","Product Not Added, ProductData ID Does Not Exists",null);
-    }
+	}
+	
+	@PostMapping(path="/getOrders" ,consumes="application/json" , produces = "application/json")
+	public Output getOrders(@RequestBody Map<String,String> farmerInfo){
+		try{
+			long farmerId = Long.parseLong(farmerInfo.get("farmerId"));
+			if(farmerRepository.existsById(farmerId)){
+				Farmer farmer = farmerRepository.findById(farmerId).get();
+				if(orderRepository.existsByFarmer(farmer)){
+					List<Order> OrderList = orderRepository.findAllByFarmer(farmer);
+					return new Output("Success","Orders Fetched Successfully",OrderList);
+				}
+				else{
+					return new Output("Success","No Orders For Th Farmer",null);
+				}
+			}
+			else{
+				return new Output("Failed","Farmer Doesnt Exist",null);
+			}
+		}
+		catch(Exception e){
+			return new Output("Failed","Something Went Wrong",null);
+		}
+		
+	}
 
 }

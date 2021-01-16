@@ -28,7 +28,7 @@ public class Order extends Dates{
     private long id;
 
     @Column(name = "delivery_status")
-    private IsDelivered deliveryStatus = IsDelivered.NO;
+    private IsDelivered deliveryStatus = IsDelivered.PENDING;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "farmer_id", nullable = false)
@@ -43,7 +43,7 @@ public class Order extends Dates{
     private Courier courier;
 
     @Column(name="order_amount")
-    private double orderAmount;
+    private double orderAmount = 0;
 
     @OneToMany(mappedBy = "order" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<OrderContent> orderContent;
@@ -79,25 +79,13 @@ public class Order extends Dates{
         return this.farmer.getName();
     }
 
-    // public void setFarmer(Farmer farmer) {
-    //     this.farmer = farmer;
-    // } 
-
     public long getCustomerId() {
         return this.customer.getId();
     }
 
-    // public void setCustomer(Customer customer) {
-    //     this.customer = customer;
-    // }
-
     public long getCourierId() {
         return this.courier.getId();
     }
-
-    // public void setCourier(Courier courier) {
-    //     this.courier = courier;
-    // }
 
     public double getOrderAmount(){
         return this.orderAmount;
@@ -105,5 +93,21 @@ public class Order extends Dates{
 
     public void setOrderAmount(double orderAmount){
         this.orderAmount = orderAmount;
+    }
+
+    public String getCustomerName(){
+        return this.customer.getName();
+    }
+
+    public String getCustomerAddress(){
+        return this.customer.getAddress();
+    }
+
+    public String getCustomerPhone(){
+        return this.customer.getPhone();
+    }
+
+    public Set<OrderContent> getOrderContent(){
+        return orderContent;
     }
 }
