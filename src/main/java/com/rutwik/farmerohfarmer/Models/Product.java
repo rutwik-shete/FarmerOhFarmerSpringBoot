@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.rutwik.farmerohfarmer.Constants;
+import com.rutwik.farmerohfarmer.Constants.IsActive;
 
 @Entity
 @Table(name = "products", schema = Constants.SCHEMA_NAME)
@@ -35,6 +36,9 @@ public class Product extends Dates {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "Product_Data_id", nullable = false)
     private ProductData productData;
+
+    @Column(name="is_active")
+    private IsActive isActive = IsActive.YES;
 
     public Product() {
         super();
@@ -74,6 +78,10 @@ public class Product extends Dates {
 
     public void setFarmer(Farmer farmer){
         this.farmer = farmer;
+    }
+
+    public void setIsActive(IsActive isActive){
+        this.isActive = isActive;
     }
 
     public long getProductDataId(){

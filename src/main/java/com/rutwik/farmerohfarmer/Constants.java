@@ -12,4 +12,8 @@ public class Constants {
         PENDING,DELIVERED,PROCESSING,DELETED
     }
 
+    public static enum IsActive{
+        NO,YES
+    }
+
 }

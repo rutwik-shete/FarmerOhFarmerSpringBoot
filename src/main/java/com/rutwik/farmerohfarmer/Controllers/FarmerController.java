@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.rutwik.farmerohfarmer.Constants.IsActive;
 import com.rutwik.farmerohfarmer.Models.Farmer;
 import com.rutwik.farmerohfarmer.Models.Order;
 import com.rutwik.farmerohfarmer.Models.Output;
@@ -103,12 +104,16 @@ public class FarmerController {
             if(farmerRepository.existsById(farmerID)){
                 Farmer farmerFound = farmerRepository.findById(farmerID).get();
                 product.setFarmer(farmerFound);
-                if(!productRepository.existsByFarmerAndProductData(farmerFound,productDataFound)){
+                if(!productRepository.existsByFarmerAndProductDataAndIsActive(farmerFound,productDataFound,IsActive.YES)){
                     productRepository.save(product);
                     return new Output("Success","Product Added",product);
                 }
                 else{
-                    return new Output("Failed","Product Already Exists",null);
+					Product updateProduct = productRepository.findAllByFarmerAndProductData(farmerFound,productDataFound);
+					updateProduct.setMeasurement(product.getMeasurement());
+					updateProduct.setCost(product.getCost());
+					productRepository.save(updateProduct);
+                    return new Output("Success","Product Updated Successfully",product);
                 }
             }
             else{
@@ -138,6 +143,47 @@ public class FarmerController {
 		}
 		catch(Exception e){
 			return new Output("Failed","Something Went Wrong",null);
+		}
+	}
+
+	@PostMapping(path="/getProducts", consumes="application/json", produces="application/json")
+	public Output getProducts(@RequestBody Map<String,String> farmerInfo){
+		try{
+			long farmerId = Long.parseLong(farmerInfo.get("farmerId"));
+			if(farmerRepository.existsById(farmerId)){
+				Farmer farmer = farmerRepository.findById(farmerId).get();
+				if(productRepository.existsByFarmer(farmer)){
+					List<Product> ProductList = productRepository.findAllByFarmerAndIsActive(farmer,IsActive.YES);
+					return new Output("Success","Orders Fetched Successfully",ProductList);
+				}
+				else{
+					return new Output("Success","No Orders For Th Farmer",null);
+				}
+			}
+			else{
+				return new Output("Failed","Farmer Doesnt Exist",null);
+			}
+		}
+		catch(Exception e){
+			return new Output("Failed","Something Went Wrong",null);
+		}
+		
+	}
+
+	@PostMapping(path="/removeProduct", consumes = "application/json", produces = "application/json")
+	public Output removeProduct(@RequestBody Map<String,String> productInfo){
+		try{
+			long productId = Long.parseLong(productInfo.get("productId"));
+			if(productRepository.existsById(productId)){
+				Product product = productRepository.findById(productId).get();
+				product.setIsActive(IsActive.NO);
+				productRepository.save(product);
+				return new Output("Success","Product Removed Successfully",null);
+			}
+			return new Output("Falied","Product Not Removed",null);
+		}
+		catch(Exception e){
+			return new Output("Falied","Product Not Removed",null);
 		}
 		
 	}

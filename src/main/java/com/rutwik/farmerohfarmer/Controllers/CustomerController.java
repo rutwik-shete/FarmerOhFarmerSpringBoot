@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.rutwik.farmerohfarmer.Constants.IsActive;
 import com.rutwik.farmerohfarmer.Constants.IsOrdered;
 import com.rutwik.farmerohfarmer.Models.Cart;
 import com.rutwik.farmerohfarmer.Models.Courier;
@@ -142,7 +143,7 @@ public class CustomerController {
 		long farmerId = inputData.get("farmerId");
 		if(farmerRepository.existsById(farmerId)){
 			Farmer farmer = farmerRepository.findById(farmerId).get();
-			List<Product> productList = productRepository.findAllByFarmer(farmer);
+			List<Product> productList = productRepository.findAllByFarmerAndIsActive(farmer,IsActive.YES);
 			if(!productList.isEmpty()){
 				return new Output("Success","Farmer Products Fetched Successfully",productList);
 			}
