@@ -2,7 +2,7 @@ package com.rutwik.farmerohfarmer;
 
 public class Constants {
     
-    public final static String SCHEMA_NAME = "trial";
+    public final static String SCHEMA_NAME = "public";
 
     public static enum IsOrdered{
         NO,YES,PROCESSING,DELETED
