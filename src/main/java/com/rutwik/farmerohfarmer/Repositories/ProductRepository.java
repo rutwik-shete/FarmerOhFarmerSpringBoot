@@ -17,6 +17,8 @@ public interface ProductRepository extends JpaRepository<Product,Long>{
 
 	boolean existsByFarmer(Farmer farmerFound);
 
+	boolean existsByFarmerAndIsActive(Farmer farmer, IsActive isActive);
+
 	Product findAllByFarmerAndProductData(Farmer farmerFound, ProductData productDataFound);
 
 	List<Product> findAllByFarmerAndIsActive(Farmer farmer, IsActive yes);

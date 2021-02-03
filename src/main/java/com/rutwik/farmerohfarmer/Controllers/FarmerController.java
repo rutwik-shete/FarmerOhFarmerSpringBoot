@@ -152,7 +152,7 @@ public class FarmerController {
 			long farmerId = Long.parseLong(farmerInfo.get("farmerId"));
 			if(farmerRepository.existsById(farmerId)){
 				Farmer farmer = farmerRepository.findById(farmerId).get();
-				if(productRepository.existsByFarmer(farmer)){
+				if(productRepository.existsByFarmerAndIsActive(farmer,IsActive.YES)){
 					List<Product> ProductList = productRepository.findAllByFarmerAndIsActive(farmer,IsActive.YES);
 					return new Output("Success","Orders Fetched Successfully",ProductList);
 				}
