@@ -134,7 +134,7 @@ public class FarmerController {
 					return new Output("Success","Orders Fetched Successfully",OrderList);
 				}
 				else{
-					return new Output("Success","No Orders For Th Farmer",null);
+					return new Output("Failed","No Orders For Th Farmer",null);
 				}
 			}
 			else{
